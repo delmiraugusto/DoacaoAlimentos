@@ -2,18 +2,29 @@ from flask_restful import Resource, reqparse
 from flask_jwt_extended import jwt_required, create_access_token, get_jwt_identity
 from src.services.UsersService import UserService
 from src.models.Base import db
+from flask import request
 import traceback
 
-user_parser = reqparse.RequestParser()
-user_parser.add_argument('nome', type=str, required=True)
-user_parser.add_argument('email', type=str, required=True)
-user_parser.add_argument('senha', type=str, required=True)
-user_parser.add_argument('telefone', type=str, required=True)
-user_parser.add_argument('documento', type=str, required=True)
-user_parser.add_argument('perfil', type=str, required=True)
-user_parser.add_argument('endereco_id', type=int, required=False)
-user_parser.add_argument('numero', type=str, required=False)
-user_parser.add_argument('complemento', type=str, required=False)
+user_create_parser = reqparse.RequestParser()
+user_create_parser.add_argument('nome', type=str, required=True)
+user_create_parser.add_argument('email', type=str, required=True)
+user_create_parser.add_argument('senha_hash', type=str, required=True)
+user_create_parser.add_argument('telefone', type=str, required=True)
+user_create_parser.add_argument('documento', type=str, required=True)
+user_create_parser.add_argument('perfil_id', type=str, required=True)
+user_create_parser.add_argument('endereco_id', type=int, required=False)
+user_create_parser.add_argument('numero', type=str, required=False)
+user_create_parser.add_argument('complemento', type=str, required=False)
+
+user_update_parser = reqparse.RequestParser()
+user_update_parser.add_argument('nome', type=str, required=False)
+user_update_parser.add_argument('telefone', type=str, required=False)
+user_update_parser.add_argument('documento', type=str, required=False)
+user_update_parser.add_argument('endereco_id', type=int, required=False)
+user_update_parser.add_argument('numero', type=str, required=False)
+user_update_parser.add_argument('complemento', type=str, required=False)
+user_update_parser.add_argument('senha_hash', type=str, required=False)
+
 
 
 class UserListResource(Resource):
@@ -30,7 +41,7 @@ class UserListResource(Resource):
                     "email": u.email,
                     "telefone": u.telefone,
                     "documento": u.documento,
-                    "perfil": u.perfil.nome
+                    "perfil_id": u.perfil.nome
                 }
                 result.append(user_dict)
             return result, 200
@@ -40,10 +51,10 @@ class UserListResource(Resource):
             return {"error": str(e)}, 500
 
     def post(self):
-        args = user_parser.parse_args()
+        data = request.get_json()
         user_service = UserService(db.session)
         try:
-            user = user_service.criar_usuario(args)
+            user = user_service.criar_usuario(data)
             return {"id": user.id, "msg": "Usuário criado com sucesso"}, 201
         except Exception as e:
             return {"error": str(e)}, 400
@@ -64,9 +75,9 @@ class UserResource(Resource):
             "documento": user.documento
         }, 200
 
-    @jwt_required()
+    # @jwt_required()
     def put(self, user_id):
-        args = user_parser.parse_args()
+        args = user_update_parser.parse_args()
         user_service = UserService(db.session)
         try:
             user = user_service.atualizar_usuario(user_id, args)
@@ -74,7 +85,7 @@ class UserResource(Resource):
         except Exception as e:
             return {"error": str(e)}, 400
 
-    @jwt_required()
+    # @jwt_required()
     def delete(self, user_id):
         user_service = UserService(db.session)
         try:

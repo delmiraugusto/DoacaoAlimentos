@@ -32,9 +32,20 @@ class UserService:
         return self.repo.get_by_email(email)
 
     def criar_usuario(self, data):
-        perfil_nome = data.get("perfil")
-        perfil = self.session.query(Perfil).filter(Perfil.nome.ilike(perfil_nome)).first()
-        if not perfil or perfil.nome.lower() not in VALID_PROFILES:
+        campos_obrigatorios = ["nome", "email", "senha", "telefone", "documento", "perfil_id", "endereco_id", "numero"]
+        campos_faltando = [campo for campo in campos_obrigatorios if not data.get(campo)]
+
+        if campos_faltando:
+            raise ValueError(f"Campos obrigatórios faltando: {', '.join(campos_faltando)}")
+        perfil_id = data.get("perfil_id")
+        if not perfil_id:
+            raise ValueError("Campo 'perfil_id' é obrigatório.")
+
+        perfil = self.session.query(Perfil).filter(Perfil.id == perfil_id).first()
+        if not perfil:
+            raise ValueError("Perfil não encontrado.")
+
+        if perfil.nome.lower() not in VALID_PROFILES:
             raise ValueError("Perfil inválido. Deve ser 'doador' ou 'solicitante'.")
 
         telefone = data.get("telefone")
@@ -56,6 +67,9 @@ class UserService:
             raise ValueError("Email já cadastrado.")
 
         senha = data.get("senha")
+        if not senha:
+            raise ValueError("Senha não pode estar vazia.")
+        
         senha_hash = bcrypt.generate_password_hash(senha).decode('utf-8')
 
         user = Users(
@@ -72,6 +86,7 @@ class UserService:
 
         return self.repo.add(user)
 
+
     def atualizar_usuario(self, user_id, data):
         user = self.repo.get_by_id(user_id)
         if not user:
@@ -79,6 +94,8 @@ class UserService:
 
         if "nome" in data:
             user.nome = data["nome"]
+        if "senha" in data and data["senha"]:
+            user.senha_hash = bcrypt.generate_password_hash(data["senha"]).decode('utf-8')
         if "telefone" in data and validar_telefone(data["telefone"]):
             user.telefone = data["telefone"]
         if "documento" in data and validar_documento(data["documento"]):
