@@ -67,7 +67,7 @@ class UserService:
             raise ValueError("Email já cadastrado.")
 
         senha = data.get("senha")
-        if not senha:
+        if not senha or len(senha) < 8:
             raise ValueError("Senha não pode estar vazia.")
         
         senha_hash = bcrypt.generate_password_hash(senha).decode('utf-8')
@@ -89,22 +89,28 @@ class UserService:
 
     def atualizar_usuario(self, user_id, data):
         user = self.repo.get_by_id(user_id)
+
+        print("Dados recebidos para atualização:", data)
+
         if not user:
             raise ValueError("Usuário não encontrado.")
 
-        if "nome" in data:
+        if "nome" in data and data["nome"]:
             user.nome = data["nome"]
         if "senha" in data and data["senha"]:
-            user.senha_hash = bcrypt.generate_password_hash(data["senha"]).decode('utf-8')
-        if "telefone" in data and validar_telefone(data["telefone"]):
+            senha = data["senha"]
+            if len(senha) < 8:
+                raise ValueError("Senha deve ter no mínimo 8 caracteres.")
+            user.senha_hash = bcrypt.generate_password_hash(senha).decode('utf-8')
+        if "telefone" in data and data["telefone"] and validar_telefone(data["telefone"]):
             user.telefone = data["telefone"]
-        if "documento" in data and validar_documento(data["documento"]):
+        if "documento" in data and data["documento"] and validar_documento(data["documento"]):
             user.documento = data["documento"]
-        if "endereco_id" in data:
+        if "endereco_id" in data and data["endereco_id"]:
             user.endereco_id = data["endereco_id"]
-        if "numero" in data:
+        if "numero" in data and data["numero"]:
             user.numero = data["numero"]
-        if "complemento" in data:
+        if "complemento" in data and data["complemento"]:
             user.complemento = data["complemento"]
 
         self.repo.update()

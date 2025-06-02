@@ -23,7 +23,7 @@ user_update_parser.add_argument('documento', type=str, required=False)
 user_update_parser.add_argument('endereco_id', type=int, required=False)
 user_update_parser.add_argument('numero', type=str, required=False)
 user_update_parser.add_argument('complemento', type=str, required=False)
-user_update_parser.add_argument('senha_hash', type=str, required=False)
+user_update_parser.add_argument('senha', type=str, required=False)
 
 
 
@@ -81,6 +81,8 @@ class UserResource(Resource):
         user_service = UserService(db.session)
         try:
             user = user_service.atualizar_usuario(user_id, args)
+            data = request.get_json()
+            print("Dados recebidos do request:", data)
             return {"msg": "Usuário atualizado com sucesso"}, 200
         except Exception as e:
             return {"error": str(e)}, 400
