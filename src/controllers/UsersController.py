@@ -61,7 +61,7 @@ class UserListResource(Resource):
 
 
 class UserResource(Resource):
-    @jwt_required()
+    # @jwt_required()
     def get(self, user_id):
         user_service = UserService(db.session)
         user = user_service.listar_por_id(user_id)
@@ -96,6 +96,27 @@ class UserResource(Resource):
         except Exception as e:
             return {"error": str(e)}, 400
 
+class UserByEmailResource(Resource):
+    # @jwt_required()
+    def get(self):
+        email = request.args.get("email")
+        if not email:
+            return {"msg": "Email é obrigatório"}, 400
+
+        user_service = UserService(db.session)
+        try:
+            user = user_service.listar_por_email(email)
+            if not user:
+                return {"msg": "Usuário não encontrado"}, 404
+            return {
+                "id": user.id,
+                "nome": user.nome,
+                "email": user.email,
+                "telefone": user.telefone,
+                "documento": user.documento
+            }, 200
+        except Exception as e:
+            return {"error": str(e)}, 500
 
 class UserLoginResource(Resource):
     def post(self):

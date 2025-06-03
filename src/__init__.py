@@ -15,6 +15,12 @@ def create_app() -> Flask:
 
     db.init_app(app)
     jwt = JWTManager(app)
+
+    # Comando para ativar a venv
+    # .\venv\Scripts\Activate.ps1
+
+    # Comando para rodar o programa
+    # flask --app manage run --host=0.0.0.0 --port=8080
     
     api = Api(app, prefix="/doacoes")
     initialize_endpoints(api)
