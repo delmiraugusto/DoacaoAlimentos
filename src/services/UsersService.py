@@ -1,5 +1,7 @@
 import re
+import requests
 from src.models.Users import Users
+from src.services.EnderecoService import EnderecoService 
 from src.models.Perfil import Perfil 
 from src.models.Doacao import Doacao
 from src.repositories.UsersRepository import UserRepository
@@ -21,6 +23,7 @@ class UserService:
     def __init__(self, session: Session):
         self.repo = UserRepository(session)
         self.session = session
+        self.endereco_service = EnderecoService(self.session)
 
     def listar_todos(self):
         return self.repo.get_all()
@@ -32,11 +35,16 @@ class UserService:
         return self.repo.get_by_email(email)
 
     def criar_usuario(self, data):
-        campos_obrigatorios = ["nome", "email", "senha", "telefone", "documento", "perfil_id", "endereco_id", "numero"]
+        campos_obrigatorios = ["nome", "email", "senha", "telefone", "documento", "perfil_id", "endereco", "numero"]
         campos_faltando = [campo for campo in campos_obrigatorios if not data.get(campo)]
+
+        nome = data.get("nome")
+        if not nome or len(nome) < 2:
+            raise ValueError("Nome não pode estar vazio.")
 
         if campos_faltando:
             raise ValueError(f"Campos obrigatórios faltando: {', '.join(campos_faltando)}")
+        
         perfil_id = data.get("perfil_id")
         if not perfil_id:
             raise ValueError("Campo 'perfil_id' é obrigatório.")
@@ -47,6 +55,14 @@ class UserService:
 
         if perfil.nome.lower() not in VALID_PROFILES:
             raise ValueError("Perfil inválido. Deve ser 'doador' ou 'solicitante'.")
+        
+        endereco_info = data.get("endereco")
+        if not endereco_info or not endereco_info.get("cep"):
+            raise ValueError("Campo 'endereco' com CEP é obrigatório.")
+
+        cep = endereco_info["cep"].replace("-", "").strip()
+        endereco = self.endereco_service.obter_ou_criar_endereco_por_cep(cep)
+        endereco_id = endereco.id
 
         telefone = data.get("telefone")
         if not validar_telefone(telefone):
@@ -73,13 +89,13 @@ class UserService:
         senha_hash = bcrypt.generate_password_hash(senha).decode('utf-8')
 
         user = Users(
-            nome=data.get("nome"),
+            nome=nome,
             email=email,
             senha_hash=senha_hash,
             telefone=telefone,
             documento=documento,
             perfil_id=perfil.id,
-            endereco_id=data.get("endereco_id"),
+            endereco_id=endereco_id,
             numero=data.get("numero"),
             complemento=data.get("complemento"),
         )
@@ -97,19 +113,34 @@ class UserService:
 
         if "nome" in data and data["nome"]:
             user.nome = data["nome"]
+
+        if "email" in data and data["email"]:
+            user.email = data["email"]
+
         if "senha" in data and data["senha"]:
             senha = data["senha"]
             if len(senha) < 8:
                 raise ValueError("Senha deve ter no mínimo 8 caracteres.")
             user.senha_hash = bcrypt.generate_password_hash(senha).decode('utf-8')
+
         if "telefone" in data and data["telefone"] and validar_telefone(data["telefone"]):
             user.telefone = data["telefone"]
+
         if "documento" in data and data["documento"] and validar_documento(data["documento"]):
             user.documento = data["documento"]
-        if "endereco_id" in data and data["endereco_id"]:
-            user.endereco_id = data["endereco_id"]
+
+        if "perfil_id" in data and data["perfil_id"]:
+            print("Novo perfil_id recebido:", data["perfil_id"])
+            user.perfil_id = data["perfil_id"]
+
+        if "endereco" in data:
+            endereco_data = data["endereco"]
+            endereco = self.endereco_service.obter_ou_atualizar_endereco(endereco_data)
+            user.endereco_id = endereco.id
+
         if "numero" in data and data["numero"]:
             user.numero = data["numero"]
+            
         if "complemento" in data and data["complemento"]:
             user.complemento = data["complemento"]
 
