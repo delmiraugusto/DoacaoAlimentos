@@ -45,7 +45,11 @@ class EnderecoService:
         )
         return self.repo.add(novo_endereco)
     
-    def obter_ou_atualizar_endereco(self, endereco_data: dict) -> Endereco:
+    def obter_ou_atualizar_endereco(self, endereco_id: int, endereco_data: dict) -> Endereco:
+        endereco = self.repo.get_by_id(endereco_id)
+        if not endereco:
+            raise ValueError("Endereço não encontrado.")
+
         cep = endereco_data.get("cep")
         if not cep:
             raise ValueError("CEP é obrigatório.")
@@ -59,35 +63,14 @@ class EnderecoService:
         if "erro" in via_cep_data:
             raise ValueError("CEP inválido.")
 
-        cep_formatado = via_cep_data["cep"]
-        logradouro_api = via_cep_data["logradouro"]
-        bairro_api = via_cep_data["bairro"]
-        cidade_api = via_cep_data["localidade"]
-        uf_api = via_cep_data["uf"]
+        endereco.cep = via_cep_data["cep"]
+        endereco.logradouro = via_cep_data["logradouro"]
+        endereco.bairro = via_cep_data["bairro"]
+        endereco.cidade = via_cep_data["localidade"]
+        endereco.uf = via_cep_data["uf"]
 
-        existente = self.repo.get_by_cep(cep_formatado)
-
-        logradouro = endereco_data.get("logradouro", logradouro_api)
-        bairro = endereco_data.get("bairro", bairro_api)
-        cidade = endereco_data.get("cidade", cidade_api)
-        uf = endereco_data.get("uf", uf_api)
-
-        if existente:
-            existente.logradouro = logradouro
-            existente.bairro = bairro
-            existente.cidade = cidade
-            existente.uf = uf
-            self.repo.update()
-            return existente
-
-        novo_endereco = Endereco(
-            cep=cep_formatado,
-            logradouro=logradouro,
-            bairro=bairro,
-            cidade=cidade,
-            uf=uf
-        )
-        return self.repo.add(novo_endereco)
+        self.repo.update()
+        return endereco
 
 
     def atualizar_endereco(self, endereco_id, data):
