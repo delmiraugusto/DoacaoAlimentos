@@ -25,7 +25,7 @@ class StatusListResource(Resource):
                 result.append(status_dict)
             return result, 200
         except Exception as e:
-            print("Erro ao buscar usuários:", e)
+            print("Erro ao buscar status:", e)
             traceback.print_exc()
             return {"error": str(e)}, 500
 

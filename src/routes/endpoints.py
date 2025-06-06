@@ -2,6 +2,8 @@ from src.controllers.UsersController import UserListResource, UserResource, User
 from src.controllers.AlimentoController import AlimentoListResource, AlimentoResource
 from src.controllers.EnderecoController import EnderecoListResource, EnderecoResource
 from src.controllers.StatusController import StatusListResource, StatusResource
+from src.controllers.PerfilController import PerfilListResource, PerfilResource
+
 
 
 def initialize_endpoints(api):
@@ -23,3 +25,7 @@ def initialize_endpoints(api):
     # Status
     api.add_resource(StatusListResource, '/status')
     api.add_resource(StatusResource, '/status/<int:status_id>')
+    
+    # Perfil
+    api.add_resource(PerfilListResource, '/perfil')
+    api.add_resource(PerfilResource, '/perfil/<int:perfil_id>')
