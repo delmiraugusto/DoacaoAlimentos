@@ -1,6 +1,8 @@
 from src.controllers.UsersController import UserListResource, UserResource, UserLoginResource, UserByEmailResource
 from src.controllers.AlimentoController import AlimentoListResource, AlimentoResource
 from src.controllers.EnderecoController import EnderecoListResource, EnderecoResource
+from src.controllers.StatusController import StatusListResource, StatusResource
+
 
 def initialize_endpoints(api):
 
@@ -17,3 +19,7 @@ def initialize_endpoints(api):
     # Endereco
     api.add_resource(EnderecoListResource, '/enderecos')
     api.add_resource(EnderecoResource, '/enderecos/<int:endereco_id>')
+
+    # Status
+    api.add_resource(StatusListResource, '/status')
+    api.add_resource(StatusResource, '/status/<int:status_id>')

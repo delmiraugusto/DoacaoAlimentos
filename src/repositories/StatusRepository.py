@@ -1,7 +1,7 @@
 from src.models.Status import Status
 from sqlalchemy.orm import Session
 
-class AlimentoRepository:
+class StatusRepository:
     def __init__(self, session: Session):
         self.session = session
 

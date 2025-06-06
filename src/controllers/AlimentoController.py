@@ -16,8 +16,8 @@ class AlimentoListResource(Resource):
     #@jwt_required()
     def get(self):
         try:
-            aliemento_service = AlimentoService(db.session)
-            alimentos = aliemento_service.listar_todos()
+            alimento_service = AlimentoService(db.session)
+            alimentos = alimento_service.listar_todos()
             result = []
             for u in alimentos:
                 alimento_dict = {
@@ -28,7 +28,7 @@ class AlimentoListResource(Resource):
                 result.append(alimento_dict)
             return result, 200
         except Exception as e:
-            print("Erro ao buscar usuários:", e)
+            print("Erro ao buscar alimentos:", e)
             traceback.print_exc()
             return {"error": str(e)}, 500
 

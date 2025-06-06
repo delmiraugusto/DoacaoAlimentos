@@ -52,10 +52,7 @@ class UserService:
         perfil = self.session.query(Perfil).filter(Perfil.id == perfil_id).first()
         if not perfil:
             raise ValueError("Perfil não encontrado.")
-
-        if perfil.nome.lower() not in VALID_PROFILES:
-            raise ValueError("Perfil inválido. Deve ser 'doador' ou 'solicitante'.")
-        
+       
         endereco_info = data.get("endereco")
         if not endereco_info or not endereco_info.get("cep"):
             raise ValueError("Campo 'endereco' com CEP é obrigatório.")
