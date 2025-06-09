@@ -38,6 +38,7 @@ CREATE TABLE Doacao (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     doador_id BIGINT not null,
     solicitante_id BIGINT,
+    descricao varchar(200),
     dataDoacao DATETIME not null,
     status_id BIGINT not null,
     data_recebimento DATETIME,

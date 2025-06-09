@@ -3,6 +3,8 @@ from src.controllers.AlimentoController import AlimentoListResource, AlimentoRes
 from src.controllers.EnderecoController import EnderecoListResource, EnderecoResource
 from src.controllers.StatusController import StatusListResource, StatusResource
 from src.controllers.PerfilController import PerfilListResource, PerfilResource
+from src.controllers.DoacaoController import DoacaoListResource, DoacaoResource, DoacoesPorSolicitanteResource, DoacoesPorDoadorResource
+
 
 
 
@@ -29,3 +31,9 @@ def initialize_endpoints(api):
     # Perfil
     api.add_resource(PerfilListResource, '/perfil')
     api.add_resource(PerfilResource, '/perfil/<int:perfil_id>')
+
+    # Doacao
+    api.add_resource(DoacaoListResource, '/doacoes')
+    api.add_resource(DoacaoResource, '/doacoes/<int:doacao_id>')
+    api.add_resource(DoacoesPorSolicitanteResource, "/doacoes/por-solicitante/<int:user_id>")
+    api.add_resource(DoacoesPorDoadorResource, "/doacoes/por-doador/<int:user_id>")

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, BigInteger, DateTime, ForeignKey
+from sqlalchemy import Column, BigInteger, DateTime, ForeignKey, String
 from sqlalchemy.orm import relationship
 from .Base import Base
 
@@ -8,6 +8,7 @@ class Doacao(Base):
     id = Column(BigInteger, primary_key=True)
     doador_id = Column(BigInteger, ForeignKey("users.id"), nullable=False)
     solicitante_id = Column(BigInteger, ForeignKey("users.id"), nullable=True)
+    descricao = Column(String(200),nullable = True)
     dataDoacao = Column(DateTime, nullable=False)
     status_id = Column(BigInteger, ForeignKey("status.id"), nullable=False)
     data_recebimento = Column(DateTime)
