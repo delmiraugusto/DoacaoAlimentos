@@ -35,14 +35,20 @@ class DoacaoService:
         doador_id = data.get("doador_id")
         if not self.user_repo.get_by_id(doador_id):
             raise ValueError(f"Doador com ID {doador_id} não existe.")
+        if not self.user_repo.isDoador(doador_id):
+            raise ValueError
         
+        solicitante_id = data.get("solicitante_id")
+        if solicitante_id:
+            if not self.user_repo.get_by_id(solicitante_id):
+                raise ValueError(f"Solicitante com ID {solicitante_id} não existe.")
+            if not self.user_repo.isSolicitante(solicitante_id):
+                raise ValueError("Usuário informado não é solicitante.")
+
+            
         status_id = data["status_id"]
         if not self.status_repo.get_by_id(status_id):
             raise ValueError(f"Status com ID {status_id} não existe.")
-        
-        solicitante_id = data.get("solicitante_id")
-        if solicitante_id and not self.user_repo.get_by_id(solicitante_id):
-            raise ValueError(f"Solicitante com ID {solicitante_id} não existe.")
 
         doacao = Doacao(
             doador_id=doador_id,
@@ -72,7 +78,7 @@ class DoacaoService:
             if not self.user_repo.get_by_id(doador_id):
                 raise ValueError(f"doador_id com ID {doador_id} não existe.")
             if not self.user_repo.isDoador(doador_id):
-                raise ValueError
+                raise ValueError("Usuário informado não é doador.")
             doacao.doador_id = doador_id
 
         if "solicitante_id" in data and data["solicitante_id"] is not None:
@@ -80,7 +86,7 @@ class DoacaoService:
             if not self.user_repo.get_by_id(solicitante_id):
                 raise ValueError(f"Solicitante com ID {solicitante_id} não existe.")
             if not self.user_repo.isSolicitante(solicitante_id):
-                raise ValueError
+                raise ValueError("Usuário informado não é solicitante.")
             
             doacao.solicitante_id = solicitante_id
 
