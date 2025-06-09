@@ -118,7 +118,7 @@ class DoacaoResource(Resource):
         args = doacao_update_parser.parse_args()
         doacao_service = DoacaoService(db.session)
         try:
-            doacao = doacao_service.atualizar_doacaos(doacao_id, args)
+            doacao = doacao_service.atualizar_doacao(doacao_id, args)
             data = request.get_json()
             print("Dados recebidos do request:", data)
             return {"msg": "Doacao atualizado com sucesso"}, 200

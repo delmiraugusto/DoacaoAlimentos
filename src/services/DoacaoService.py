@@ -1,12 +1,16 @@
 import re
 from src.models.Doacao import Doacao
 from src.repositories.DoacaoRepository import DoacaoRepository
+from src.repositories.UsersRepository import UserRepository
+from src.repositories.StatusRepository import StatusRepository
 from sqlalchemy.orm import Session
-from datetime import datetime
+from datetime import datetime, timezone
 
 class DoacaoService:
     def __init__(self, session: Session):
         self.repo = DoacaoRepository(session)
+        self.user_repo = UserRepository(session)
+        self.status_repo = StatusRepository(session)
         self.session = session
 
     def listar_todos(self):
@@ -43,7 +47,7 @@ class DoacaoService:
         doacao = Doacao(
             doador_id=doador_id,
             status_id=status_id,
-            dataDoacao=datetime(),
+            dataDoacao=datetime.now(timezone.utc),
             solicitante_id=solicitante_id,
             descricao=data.get("descricao"),
             data_recebimento=data.get("data_recebimento"),
@@ -63,10 +67,20 @@ class DoacaoService:
         if "descricao" in data and data["descricao"] is not None:
             doacao.descricao = data["descricao"]
 
+        if "doador_id" in data and data["doador_id"] is not None:
+            doador_id = data["doador_id"]
+            if not self.user_repo.get_by_id(doador_id):
+                raise ValueError(f"doador_id com ID {doador_id} não existe.")
+            if not self.user_repo.isDoador(doador_id):
+                raise ValueError
+            doacao.doador_id = doador_id
+
         if "solicitante_id" in data and data["solicitante_id"] is not None:
             solicitante_id = data["solicitante_id"]
             if not self.user_repo.get_by_id(solicitante_id):
                 raise ValueError(f"Solicitante com ID {solicitante_id} não existe.")
+            if not self.user_repo.isSolicitante(solicitante_id):
+                raise ValueError
             
             doacao.solicitante_id = solicitante_id
 
@@ -81,7 +95,7 @@ class DoacaoService:
             doacao.data_recebimento = data["data_recebimento"]
 
         self.repo.update()
-        
+
         return doacao
 
 

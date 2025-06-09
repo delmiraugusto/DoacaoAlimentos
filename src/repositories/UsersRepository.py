@@ -13,7 +13,25 @@ class UserRepository:
 
     def get_by_email(self, email):
         return self.session.query(Users).filter(Users.email == email).first()
-
+    
+    def isDoador(self, user_id):
+        user = self.session.query(Users).filter(Users.id == user_id).first()
+        if not user:
+            raise ValueError("Usuário não encontrado")
+        if user.perfil_id == 1:
+            return True
+        else:
+            raise ValueError("Não é doador")
+        
+    def isSolicitante(self, user_id):
+        user = self.session.query(Users).filter(Users.id == user_id).first()
+        if not user:
+            raise ValueError("Usuário não encontrado")
+        if user.perfil_id == 2:
+            return True
+        else:
+            raise ValueError("Não é solicitante")
+    
     def add(self, user):
         self.session.add(user)
         self.session.commit()

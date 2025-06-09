@@ -35,5 +35,5 @@ def initialize_endpoints(api):
     # Doacao
     api.add_resource(DoacaoListResource, '/doacoes')
     api.add_resource(DoacaoResource, '/doacoes/<int:doacao_id>')
-    api.add_resource(DoacoesPorSolicitanteResource, "/doacoes/por-solicitante/<int:user_id>")
-    api.add_resource(DoacoesPorDoadorResource, "/doacoes/por-doador/<int:user_id>")
+    api.add_resource(DoacoesPorSolicitanteResource, "/doacoes/solicitante/<int:user_id>")
+    api.add_resource(DoacoesPorDoadorResource, "/doacoes/doador/<int:user_id>")
