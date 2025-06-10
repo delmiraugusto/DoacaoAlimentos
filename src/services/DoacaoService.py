@@ -44,8 +44,7 @@ class DoacaoService:
                 raise ValueError(f"Solicitante com ID {solicitante_id} não existe.")
             if not self.user_repo.isSolicitante(solicitante_id):
                 raise ValueError("Usuário informado não é solicitante.")
-
-            
+ 
         status_id = data["status_id"]
         if not self.status_repo.get_by_id(status_id):
             raise ValueError(f"Status com ID {status_id} não existe.")
@@ -60,7 +59,6 @@ class DoacaoService:
         )
 
         return self.repo.add(doacao)
-
 
     def atualizar_doacao(self, doacao_id, data):
         doacao = self.repo.get_by_id(doacao_id)
@@ -103,8 +101,6 @@ class DoacaoService:
         self.repo.update()
 
         return doacao
-
-
 
     def deletar_doacao(self, doacao_id):
         doacao = self.repo.get_by_id(doacao_id)

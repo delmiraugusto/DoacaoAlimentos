@@ -27,8 +27,6 @@ user_update_parser.add_argument('numero', type=str, required=False)
 user_update_parser.add_argument('complemento', type=str, required=False)
 user_update_parser.add_argument('senha', type=str, required=False)
 
-
-
 class UserListResource(Resource):
     #@jwt_required()
     def get(self):
