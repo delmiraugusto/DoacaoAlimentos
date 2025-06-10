@@ -81,13 +81,13 @@ classDiagram
   }
 
   %% Relações
-  Users --> Endereco : "possui"
-  Users --> Perfil : "pertence"
-  Doacao --> Users : "doador"
-  Doacao --> Users : "solicitante"
-  Doacao --> Status : "possui"
-  DoacaoItem --> Doacao : "pertence"
-  DoacaoItem --> Alimento : "refere"
+  Users --> Endereco
+  Users --> Perfil
+  Doacao --> Users
+  Doacao --> Status
+  DoacaoItem --> Doacao
+  DoacaoItem --> Alimento
+
 ```
 
 <h2>Como rodar </h2>
