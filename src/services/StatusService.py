@@ -28,8 +28,6 @@ class StatusService:
         if not re.match(r"^[A-Za-zÀ-ÿ\s\-]+$", nome):
             raise ValueError("Nome contém caracteres inválidos.")
         
-        
-        
         status = Status(
             nome=nome,
         )

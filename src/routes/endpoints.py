@@ -4,9 +4,7 @@ from src.controllers.EnderecoController import EnderecoListResource, EnderecoRes
 from src.controllers.StatusController import StatusListResource, StatusResource
 from src.controllers.PerfilController import PerfilListResource, PerfilResource
 from src.controllers.DoacaoController import DoacaoListResource, DoacaoResource, DoacoesPorSolicitanteResource, DoacoesPorDoadorResource
-
-
-
+from src.controllers.DoacaoItemController import DoacaoItemListResource, DoacaoItemResource
 
 def initialize_endpoints(api):
 
@@ -37,3 +35,7 @@ def initialize_endpoints(api):
     api.add_resource(DoacaoResource, '/doacoes/<int:doacao_id>')
     api.add_resource(DoacoesPorSolicitanteResource, "/doacoes/solicitante/<int:user_id>")
     api.add_resource(DoacoesPorDoadorResource, "/doacoes/doador/<int:user_id>")
+    
+    # DoacaoItem
+    api.add_resource(DoacaoItemListResource, '/doacoesItens')
+    api.add_resource(DoacaoItemResource, '/doacoesItens/<int:doacaoItem_id>')
