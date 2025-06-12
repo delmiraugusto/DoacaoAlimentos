@@ -1,6 +1,6 @@
 <h1> Doação de Alimentos </h1>
 
-Doações podem ser anunciadas após o cadastro do doador, e solicitadas. Essas solicitações podem ser feita por usuários (cadastrados), no papel de solicitantes. 
+Doações podem ser anunciadas após o cadastro do doador, e solicitadas. Essas solicitações podem ser feitas por usuários (cadastrados), no papel de solicitantes. 
 As doações já solicitadas e entregues, entram no status de concluídas.
 
 A ideia é que o usuário possa ter informações de contato dos doadores, para que eles combinem os encontros para a entrega das doações, algo semelhante com as vendas 
