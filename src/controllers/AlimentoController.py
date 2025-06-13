@@ -51,7 +51,6 @@ class AlimentoResource(Resource):
             if not alimento:
                 return {"msg": "Alimento não encontrado"}, 404
             return {
-                "id": alimento.id,
                 "nome": alimento.nome,
                 "marca": alimento.marca,
             }, 200

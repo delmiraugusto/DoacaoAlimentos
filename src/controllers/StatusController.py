@@ -48,7 +48,6 @@ class StatusResource(Resource):
             if not status:
                 return {"msg": "Status não encontrado"}, 404
             return {
-                "id": status.id,
                 "nome": status.nome,
             }, 200
         except Exception as e:

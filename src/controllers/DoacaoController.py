@@ -100,7 +100,6 @@ class DoacaoResource(Resource):
             if not doacao:
                 return {"msg": "Doacao não encontrado"}, 404
             return {
-                    "id": doacao.id,
                     "doador_nome": doacao.doador.nome,
                     "solicitante_nome": doacao.doador.nome,
                     "descricao": doacao.descricao,
