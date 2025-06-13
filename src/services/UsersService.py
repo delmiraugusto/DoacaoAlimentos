@@ -131,8 +131,8 @@ class UserService:
             user.perfil_id = data["perfil_id"]
 
         if "endereco" in data:
-            endereco_data = data["endereco"]
-            endereco = self.endereco_service.obter_ou_atualizar_endereco(endereco_data)
+            cep = data["endereco"] 
+            endereco = self.endereco_service.obter_ou_atualizar_endereco(cep)
             user.endereco_id = endereco.id
 
         if "numero" in data and data["numero"]:

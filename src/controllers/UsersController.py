@@ -21,7 +21,7 @@ user_update_parser.add_argument('nome', type=str, required=False)
 user_update_parser.add_argument('telefone', type=str, required=False)
 user_create_parser.add_argument('email', type=str, required=False)
 user_update_parser.add_argument('documento', type=str, required=False)
-user_update_parser.add_argument('endereco_id', type=int, required=False)
+user_update_parser.add_argument('endereco', type=int, required=False)
 user_update_parser.add_argument('endereco', type=dict, required=False)
 user_update_parser.add_argument('numero', type=str, required=False)
 user_update_parser.add_argument('complemento', type=str, required=False)
@@ -68,7 +68,6 @@ class UserResource(Resource):
         if not user:
             return {"msg": "Usuário não encontrado"}, 404
         return {
-            "id": user.id,
             "nome": user.nome,
             "email": user.email,
             "telefone": user.telefone,
@@ -77,12 +76,12 @@ class UserResource(Resource):
 
     # @jwt_required()
     def put(self, user_id):
-        args = user_update_parser.parse_args()
+        data = request.get_json()
+        print("Dados recebidos do request:", data)
+
         user_service = UserService(db.session)
         try:
-            user = user_service.atualizar_usuario(user_id, args)
-            data = request.get_json()
-            print("Dados recebidos do request:", data)
+            user_service.atualizar_usuario(user_id, data)
             return {"msg": "Usuário atualizado com sucesso"}, 200
         except Exception as e:
             return {"error": str(e)}, 400
