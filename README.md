@@ -95,7 +95,7 @@ classDiagram
 1. Faça clone do projeto: ```git clone git@github.com:delmiraugusto/DoacaoAlimentos.git```
 2. Certifique de ter o python instalado: ```python --version```
 3. Crie um ambiente virtual(venv): ```python -m venv venv```
-4. Use o comando: ```.\venv\Scripts\Activate.ps1 para ativar a venv```
+4. Use o comando: ```.\venv\Scripts\Activate.ps1``` para ativar a venv
 5. Instale as dependencia do requirements.txt: ```pip install -r requirements.txt```
 6. Rode o projeto com: ```flask --app manage run --host=0.0.0.0 --port=8080```
 
