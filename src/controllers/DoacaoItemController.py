@@ -56,7 +56,6 @@ class DoacaoItemResource(Resource):
             if not doacaoItem:
                 return {"msg": "DoacaoItem não encontrado"}, 404
             return {
-                    "id": doacaoItem.id,
                     "doacao_id": doacaoItem.doacao_id,
                     "alimento_id": doacaoItem.alimento_id,
                     "quantidade": doacaoItem.quantidade,
