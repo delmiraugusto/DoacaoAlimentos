@@ -53,7 +53,6 @@ class EnderecoResource(Resource):
         try:
             endereco = endereco_service.listar_por_id(endereco_id)
             return {
-                "id": endereco.id,
                 "cep": endereco.cep,
                 "logradouro": endereco.logradouro,
                 "bairro": endereco.bairro,
