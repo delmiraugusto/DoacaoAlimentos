@@ -48,7 +48,6 @@ class PerfilResource(Resource):
             if not perfil:
                 return {"msg": "Perfil não encontrado"}, 404
             return {
-                "id": perfil.id,
                 "nome": perfil.nome,
             }, 200
         except Exception as e:
