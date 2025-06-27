@@ -38,11 +38,11 @@ class DoacaoItemService:
         if quantidade <= 0:
             raise ValueError(f"Quantidade deve ser maior que 0")
         
-        dataVencimento_str = data["data_vencimento"] 
-        data_vencimento = datetime.strptime(dataVencimento_str, "%Y-%m-%d")
-        data_atual = datetime.now()
+        dataVencimento_str = data["data_vencimento"]
+        data_vencimento = datetime.strptime(dataVencimento_str, "%Y-%m-%d").date()
+        data_atual = datetime.now().date()
 
-        if data_vencimento < data_atual:
+        if data_vencimento <= data_atual:
             raise ValueError("A data de vencimento deve ser maior que a data atual")
 
         doacaoItem = DoacaoItem(

@@ -14,10 +14,10 @@ bcrypt = Bcrypt()
 VALID_PROFILES = ['doador', 'solicitante']
 
 def validar_telefone(telefone):
-    return re.fullmatch(r'\+?\d{8,15}', telefone) is not None
+    return re.fullmatch(r'\+?\d{9,15}', telefone) is not None
 
 def validar_documento(documento):
-    return documento is not None and len(documento) >= 5
+    return documento is not None and len(documento) == 11
 
 class UserService:
     def __init__(self, session: Session):
@@ -40,7 +40,7 @@ class UserService:
 
         nome = data.get("nome")
         if not nome or len(nome) < 2:
-            raise ValueError("Nome não pode estar vazio.")
+            raise ValueError("Nome não pode estar vazio ou menor que dois caracteres")
 
         if campos_faltando:
             raise ValueError(f"Campos obrigatórios faltando: {', '.join(campos_faltando)}")
@@ -63,25 +63,25 @@ class UserService:
 
         telefone = data.get("telefone")
         if not validar_telefone(telefone):
-            raise ValueError("Telefone inválido.")
+            raise ValueError("Telefone invalido.")
 
         email = data.get("email")
         try:
             valid = validate_email(email)
             email = valid.email
         except EmailNotValidError:
-            raise ValueError("Email inválido.")
+            raise ValueError("Email invalido.")
 
         documento = data.get("documento")
         if not validar_documento(documento):
-            raise ValueError("Documento inválido.")
+            raise ValueError("Documento invalido.")
 
         if self.repo.get_by_email(email):
             raise ValueError("Email já cadastrado.")
 
         senha = data.get("senha")
         if not senha or len(senha) < 8:
-            raise ValueError("Senha não pode estar vazia.")
+            raise ValueError("Senha não pode estar vazia ou menor que 8 caracteres")
         
         senha_hash = bcrypt.generate_password_hash(senha).decode('utf-8')
 
