@@ -29,7 +29,8 @@ class EnderecoRepository:
         self.session.refresh(endereco)
         return endereco
 
-    def update(self):
+    def update(self, endereco):
+        self.session.merge(endereco)
         self.session.commit()
 
     def delete(self, alimento):

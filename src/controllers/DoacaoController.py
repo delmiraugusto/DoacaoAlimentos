@@ -103,7 +103,7 @@ class DoacaoResource(Resource):
                     "doador_nome": doacao.doador.nome,
                     "solicitante_nome": doacao.doador.nome,
                     "descricao": doacao.descricao,
-                    "status_id": doacao.status.nome,
+                    "status": doacao.status.nome,
                     "dataDoacao": doacao.dataDoacao.isoformat() if doacao.dataDoacao else None,
                     "data_recebimento": doacao.data_recebimento.isoformat() if doacao.data_recebimento else None
             }, 200

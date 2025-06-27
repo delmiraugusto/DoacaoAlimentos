@@ -45,36 +45,38 @@ class EnderecoService:
         )
         return self.repo.add(novo_endereco)
     
-    def obter_ou_atualizar_endereco(self, cep):
+    def obter_ou_atualizar_endereco(self, endereco_id, cep:str):
+
         if not cep:
             raise ValueError("CEP é obrigatório.")
 
         cep = cep.replace("-", "").strip()
 
-        # busca no banco
-        endereco = self.repo.get_by_cep(cep)
-        if endereco:
-            return endereco
+        if not cep.isdigit() or len(cep) != 8:
+            raise ValueError("Formato de CEP inválido.")
 
-        # via API
+        endereco = self.repo.get_by_id(endereco_id)
+        if not endereco:
+            raise ValueError("Endereço com ID informado não foi encontrado.")
+
         via_cep_resp = requests.get(f"https://viacep.com.br/ws/{cep}/json/")
         if via_cep_resp.status_code != 200:
             raise ValueError("Erro ao consultar o CEP.")
 
         via_cep_data = via_cep_resp.json()
+
         if "erro" in via_cep_data:
             raise ValueError("CEP inválido.")
 
-        novo_endereco = Endereco(
-            cep=via_cep_data["cep"],
-            logradouro=via_cep_data["logradouro"],
-            bairro=via_cep_data["bairro"],
-            cidade=via_cep_data["localidade"],
-            uf=via_cep_data["uf"]
-        )
+        endereco.cep = via_cep_data["cep"]
+        endereco.logradouro = via_cep_data["logradouro"]
+        endereco.bairro = via_cep_data["bairro"]
+        endereco.cidade = via_cep_data["localidade"]
+        endereco.uf = via_cep_data["uf"]
 
-        self.repo.add(novo_endereco)
-        return novo_endereco
+        self.repo.update(endereco)
+        print("Endereço atualizado com sucesso.")
+        return endereco
 
 
     def atualizar_endereco(self, endereco_id, data):

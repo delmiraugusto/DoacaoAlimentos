@@ -67,7 +67,8 @@ class EnderecoResource(Resource):
         args = endereco_update_parser.parse_args()
         endereco_service = EnderecoService(db.session)
         try:
-            endereco = endereco_service.obter_ou_atualizar_endereco(endereco_id, args)
+            cep = args.get('cep')
+            endereco_service.obter_ou_atualizar_endereco(endereco_id, cep)
             return {"msg": "Endereco atualizado com sucesso"}, 200
         except Exception as e:
             return {"error": str(e)}, 400
