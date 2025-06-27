@@ -13,8 +13,8 @@ com “entrega a combinar” em plataformas como a OLX, por exemplo.
 - O sistema não permitirá cadastrar um e-mail inválido;
 - O sistema não permitirá cadastrar um número de telefone inválido;
 - O sistema não permitirá um endereço inválido;
-- O sistema não permitirá cadastrar uma doação sem os dados obrigatórios: Id do alimento, Id do doador, status.
-- O sistema não permitirá anunciar um alimento com data de validade anterior a data atual, ou a menos de 1 semana de vencer;
+- O sistema não permitirá cadastrar uma doação sem os dados obrigatórios: Id do alimento, Id do doador, status;
+- O sistema não permitirá anunciar uma doação com data de validade anterior a data atual;
 - O sistema não permitirá excluir um doador com doações pendentes;
 - O sistema não permitirá cadastrar uma doação com alimentos inválidos;
 - O sistema não permitirá cadastrar uma doação com quantidade menor ou igual a 0;
